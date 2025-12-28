@@ -54,5 +54,4 @@ jobs:
 
       - name: Trigger Databricks job
         run: |
-          JOB_ID=$(databricks jobs list --output json | jq -r '.jobs[0].job_id')
-          databricks jobs run-now --job-id "$JOB_ID"
+          databricks jobs run-now --job-id ${{ secrets.DATABRICKS_JOB_ID }}
