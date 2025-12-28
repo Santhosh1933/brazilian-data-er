@@ -2,8 +2,7 @@ name: Build and Deploy to Databricks
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -21,35 +20,39 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install Databricks CLI v2
         run: |
-          python -m pip install --upgrade pip
-          pip install build databricks-cli
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.281.0/install.sh | sudo sh
 
-      - name: Replace Databricks config.json
+      - name: Verify Databricks auth
+        run: |
+          databricks auth describe
+
+      - name: Replace config.json in Volume
         run: |
           databricks fs cp config.json \
           dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config.json \
           --overwrite
 
-      - name: Build wheel package
+      - name: Build wheel
         run: |
+          python -m pip install --upgrade pip build
           python -m build
 
-      - name: Upload wheel to Databricks Volume
+      - name: Upload wheel to Volume
         run: |
           WHL_FILE=$(ls dist/*.whl | head -n 1)
           databricks fs cp "$WHL_FILE" \
           dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/builds/ \
           --overwrite
 
-      - name: Deploy Databricks job using databricks.yml
+      - name: Deploy job from databricks.yml
         run: |
           databricks jobs deploy --file databricks.yml
 
       - name: Trigger Databricks job
         run: |
-          JOB_ID=$(databricks jobs list --output JSON | jq -r '.jobs[0].job_id')
+          JOB_ID=$(databricks jobs list --output json | jq -r '.jobs[0].job_id')
           databricks jobs run-now --job-id "$JOB_ID"
