@@ -48,9 +48,9 @@ jobs:
           dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/builds/ \
           --overwrite
 
-      - name: Deploy job from databricks.yml
+      - name: Deploy Databricks job
         run: |
-          databricks jobs reset --json-file databricks_reset_job.json
+          databricks jobs reset --json @databricks_reset_job.json
 
       - name: Trigger Databricks job
         run: |
