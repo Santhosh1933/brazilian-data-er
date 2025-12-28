@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy job from databricks.yml
         run: |
-          databricks jobs deploy --file databricks.yml
+          databricks jobs reset --json-file databricks_reset_job.json
 
       - name: Trigger Databricks job
         run: |
