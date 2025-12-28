@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brazilian-data-er"
+version = "0.1.1"
+description = "Brazilian E-commerce Data Pipeline - Bronze, Silver, and Gold Layer Processing"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pyspark>=3.0.0",
+]
+
+[project.scripts]
+# Bronze layer entry points
+bronze-customers = "brazilian_data_er.bronze.customers:main"
+bronze-geolocation = "brazilian_data_er.bronze.geolocation:main"
+bronze-order-items = "brazilian_data_er.bronze.order_items:main"
+bronze-order-payments = "brazilian_data_er.bronze.order_payments:main"
+bronze-order-reviews = "brazilian_data_er.bronze.order_reviews:main"
+bronze-orders = "brazilian_data_er.bronze.orders:main"
+bronze-products = "brazilian_data_er.bronze.products:main"
+bronze-sellers = "brazilian_data_er.bronze.sellers:main"
+bronze-product-category-translation = "brazilian_data_er.bronze.product_category_translation:main"
+
+# Silver layer entry points
+silver-customers = "brazilian_data_er.silver.customers:main"
+silver-sellers = "brazilian_data_er.silver.sellers:main"
+silver-products = "brazilian_data_er.silver.products:main"
+silver-orders = "brazilian_data_er.silver.orders:main"
+silver-order-items = "brazilian_data_er.silver.order_items:main"
+silver-payments = "brazilian_data_er.silver.payments:main"
+silver-reviews = "brazilian_data_er.silver.reviews:main"
+
+# Gold layer entry points
+gold-sales-fact = "brazilian_data_er.gold.sales_fact:main"
+gold-daily-sales = "brazilian_data_er.gold.daily_sales:main"
+gold-customer-ltv = "brazilian_data_er.gold.customer_ltv:main"
+gold-product-performance = "brazilian_data_er.gold.product_performance:main"
+gold-review-insights = "brazilian_data_er.gold.review_insights:main"
+
+[tool.setuptools]
+packages = [
+    "brazilian_data_er",
+    "brazilian_data_er.bronze",
+    "brazilian_data_er.silver",
+    "brazilian_data_er.gold",
+    "brazilian_data_er.utils"
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
+
+[tool.setuptools.package-dir]
+"" = "src"

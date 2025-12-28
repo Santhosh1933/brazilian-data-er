@@ -1,0 +1,156 @@
+resources:
+  jobs:
+    brazilian_ingestion:
+      name: brazilian_ingestion
+      tasks:
+        # Bronze layer tasks
+        - task_key: bronze_customers
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-customers
+          depends_on: []
+        - task_key: bronze_geolocation
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-geolocation
+          depends_on: []
+        - task_key: bronze_order_items
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-order-items
+          depends_on: []
+        - task_key: bronze_order_payments
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-order-payments
+          depends_on: []
+        - task_key: bronze_order_reviews
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-order-reviews
+          depends_on: []
+        - task_key: bronze_orders
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-orders
+          depends_on: []
+        - task_key: bronze_products
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-products
+          depends_on: []
+        - task_key: bronze_sellers
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-sellers
+          depends_on: []
+        - task_key: bronze_product_category_translation
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: bronze-product-category-translation
+          depends_on: []
+        
+        # Silver layer tasks - depend on bronze layer
+        - task_key: silver_customers
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-customers
+          depends_on:
+            - task_key: bronze_customers
+            - task_key: bronze_geolocation
+        - task_key: silver_sellers
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-sellers
+          depends_on:
+            - task_key: bronze_sellers
+            - task_key: bronze_geolocation
+        - task_key: silver_products
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-products
+          depends_on:
+            - task_key: bronze_products
+            - task_key: bronze_product_category_translation
+        - task_key: silver_orders
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-orders
+          depends_on:
+            - task_key: bronze_orders
+        - task_key: silver_order_items
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-order-items
+          depends_on:
+            - task_key: bronze_order_items
+        - task_key: silver_payments
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-payments
+          depends_on:
+            - task_key: bronze_order_payments
+        - task_key: silver_reviews
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-reviews
+          depends_on:
+            - task_key: bronze_order_reviews
+        
+        # Gold layer tasks - depend on silver layer
+        - task_key: gold_sales_fact
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: gold-sales-fact
+          depends_on:
+            - task_key: silver_orders
+            - task_key: silver_order_items
+            - task_key: silver_products
+            - task_key: silver_customers
+            - task_key: silver_sellers
+        - task_key: gold_daily_sales
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: gold-daily-sales
+          depends_on:
+            - task_key: silver_orders
+            - task_key: silver_order_items
+            - task_key: silver_customers
+        - task_key: gold_customer_ltv
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: gold-customer-ltv
+          depends_on:
+            - task_key: silver_orders
+            - task_key: silver_order_items
+            - task_key: silver_customers
+        - task_key: gold_product_performance
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: gold-product-performance
+          depends_on:
+            - task_key: silver_order_items
+            - task_key: silver_products
+            - task_key: silver_reviews
+        - task_key: gold_review_insights
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: gold-review-insights
+          depends_on:
+            - task_key: silver_reviews
+            - task_key: silver_orders
+            - task_key: silver_order_items
+            - task_key: silver_products
+      
+      queue:
+        enabled: true
+      
+      environments:
+        - environment_key: Default
+          spec:
+            dependencies:
+              - /Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/builds/brazilian_data_er-0.1.1-py3-none-any.whl
+            environment_version: "4"
+      
+      performance_target: PERFORMANCE_OPTIMIZED
+

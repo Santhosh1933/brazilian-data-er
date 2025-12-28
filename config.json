@@ -1,0 +1,65 @@
+{
+  "paths": {
+    "csv_base_path": "/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce",
+    "csv_files": {
+      "customers": "olist_customers_dataset.csv",
+      "geolocation": "olist_geolocation_dataset.csv",
+      "order_items": "olist_order_items_dataset.csv",
+      "order_payments": "olist_order_payments_dataset.csv",
+      "order_reviews": "olist_order_reviews_dataset.csv",
+      "orders": "olist_orders_dataset.csv",
+      "products": "olist_products_dataset.csv",
+      "sellers": "olist_sellers_dataset.csv",
+      "product_category_translation": "product_category_name_translation.csv"
+    }
+  },
+  "tables": {
+    "bronze": {
+      "schema": "workspace.bronze",
+      "names": {
+        "customers": "bronze_customers",
+        "geolocation": "bronze_geolocation",
+        "order_items": "bronze_order_items",
+        "order_payments": "bronze_order_payments",
+        "order_reviews": "bronze_order_reviews",
+        "orders": "bronze_orders",
+        "products": "bronze_products",
+        "sellers": "bronze_sellers",
+        "product_category_translation": "bronze_product_category_translation"
+      }
+    },
+    "silver": {
+      "schema": "workspace.silver",
+      "names": {
+        "customers": "silver_customers",
+        "sellers": "silver_sellers",
+        "products": "silver_products",
+        "orders": "silver_orders",
+        "order_items": "silver_order_items",
+        "payments": "silver_payments",
+        "reviews": "silver_reviews"
+      }
+    },
+    "gold": {
+      "schema": "workspace.gold",
+      "names": {
+        "sales_fact": "gold_sales_fact",
+        "daily_sales": "gold_daily_sales",
+        "customer_ltv": "gold_customer_ltv",
+        "product_performance": "gold_product_performance",
+        "review_insights": "gold_review_insights"
+      }
+    }
+  },
+  "spark": {
+    "read_options": {
+      "header": true,
+      "inferSchema": true
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "enable_debug_info": false
+  }
+}
