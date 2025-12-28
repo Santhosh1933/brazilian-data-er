@@ -1,0 +1,55 @@
+name: Build and Deploy to Databricks
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build databricks-cli
+
+      - name: Replace Databricks config.json
+        run: |
+          databricks fs cp config.json \
+          dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config.json \
+          --overwrite
+
+      - name: Build wheel package
+        run: |
+          python -m build
+
+      - name: Upload wheel to Databricks Volume
+        run: |
+          WHL_FILE=$(ls dist/*.whl | head -n 1)
+          databricks fs cp "$WHL_FILE" \
+          dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/builds/ \
+          --overwrite
+
+      - name: Deploy Databricks job using databricks.yml
+        run: |
+          databricks jobs deploy --file databricks.yml
+
+      - name: Trigger Databricks job
+        run: |
+          JOB_ID=$(databricks jobs list --output JSON | jq -r '.jobs[0].job_id')
+          databricks jobs run-now --job-id "$JOB_ID"

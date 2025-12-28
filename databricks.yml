@@ -154,6 +154,6 @@ resources:
         - environment_key: Default
           spec:
             dependencies:
-              - /Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/builds/brazilian_data_er-0.1.1-py3-none-any.whl
+              - /Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/builds/brazilian_data_er-0.1.2-py3-none-any.whl
             environment_version: "4"
       performance_target: PERFORMANCE_OPTIMIZED
