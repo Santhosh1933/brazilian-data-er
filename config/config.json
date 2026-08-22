@@ -1,6 +1,6 @@
 {
   "paths": {
-    "csv_base_path": "/Volumes/brazilian-e-commerce/bronze/raw_data",
+    "csv_base_path": "/Volumes/brazilian-e-commerce/bronze/raw_data/assets/csv/",
     "csv_files": {
       "customers": "olist_customers_dataset.csv",
       "geolocation": "olist_geolocation_dataset.csv",
