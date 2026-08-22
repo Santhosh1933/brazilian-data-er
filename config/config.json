@@ -27,28 +27,6 @@
         "sellers": "bronze_sellers",
         "product_category_translation": "bronze_product_category_translation"
       }
-    },
-    "silver": {
-      "schema": "workspace.silver",
-      "names": {
-        "customers": "silver_customers",
-        "sellers": "silver_sellers",
-        "products": "silver_products",
-        "orders": "silver_orders",
-        "order_items": "silver_order_items",
-        "payments": "silver_payments",
-        "reviews": "silver_reviews"
-      }
-    },
-    "gold": {
-      "schema": "workspace.gold",
-      "names": {
-        "sales_fact": "gold_sales_fact",
-        "daily_sales": "gold_daily_sales",
-        "customer_ltv": "gold_customer_ltv",
-        "product_performance": "gold_product_performance",
-        "review_insights": "gold_review_insights"
-      }
     }
   },
   "spark": {

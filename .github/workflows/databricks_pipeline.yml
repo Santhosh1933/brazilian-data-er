@@ -2,7 +2,7 @@ name: Build and Deploy to Databricks
 
 on:
   push:
-    branches: [master]
+    branches: [rewiring]
   workflow_dispatch:
 
 jobs:
@@ -29,15 +29,6 @@ jobs:
       - name: Verify Databricks auth
         run: |
           databricks auth describe
-
-      - name: Upload configuration files to Volume
-        run: |
-          databricks fs cp config/config.json \
-          dbfs:/Volumes/brazilian-e-commerce/bronze/raw_data/configs/config.json \
-          --overwrite
-          databricks fs cp config/bronze.json \
-          dbfs:/Volumes/brazilian-e-commerce/bronze/raw_data/configs/bronze.json \
-          --overwrite
 
       - name: Build wheel
         run: |

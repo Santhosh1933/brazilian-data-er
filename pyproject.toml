@@ -16,28 +16,10 @@ dependencies = [
 # Bronze layer entry point
 bronze = "brazilian_data_er.bronze.bronze:main"
 
-# Silver layer entry points
-silver-customers = "brazilian_data_er.silver.customers:main"
-silver-sellers = "brazilian_data_er.silver.sellers:main"
-silver-products = "brazilian_data_er.silver.products:main"
-silver-orders = "brazilian_data_er.silver.orders:main"
-silver-order-items = "brazilian_data_er.silver.order_items:main"
-silver-payments = "brazilian_data_er.silver.payments:main"
-silver-reviews = "brazilian_data_er.silver.reviews:main"
-
-# Gold layer entry points
-gold-sales-fact = "brazilian_data_er.gold.sales_fact:main"
-gold-daily-sales = "brazilian_data_er.gold.daily_sales:main"
-gold-customer-ltv = "brazilian_data_er.gold.customer_ltv:main"
-gold-product-performance = "brazilian_data_er.gold.product_performance:main"
-gold-review-insights = "brazilian_data_er.gold.review_insights:main"
-
 [tool.setuptools]
 packages = [
     "brazilian_data_er",
     "brazilian_data_er.bronze",
-    "brazilian_data_er.silver",
-    "brazilian_data_er.gold",
     "brazilian_data_er.utils"
 ]
 
