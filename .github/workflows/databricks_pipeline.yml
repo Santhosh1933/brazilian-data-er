@@ -29,11 +29,21 @@ jobs:
       - name: Verify Databricks auth
         run: |
           databricks auth describe
+          databricks current-user me
 
       - name: Build wheel
         run: |
           python -m pip install --upgrade pip build
           python -m build
+
+      - name: Upload configuration files to Volume
+        run: |
+          databricks fs cp config/config.json \
+          dbfs:/Volumes/brazilian-e-commerce/bronze/raw_data/configs/config.json \
+          --overwrite
+          databricks fs cp config/bronze.json \
+          dbfs:/Volumes/brazilian-e-commerce/bronze/raw_data/configs/bronze.json \
+          --overwrite
 
       - name: Upload wheel to Volume
         run: |
