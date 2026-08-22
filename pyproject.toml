@@ -13,16 +13,8 @@ dependencies = [
 ]
 
 [project.scripts]
-# Bronze layer entry points
-bronze-customers = "brazilian_data_er.bronze.customers:main"
-bronze-geolocation = "brazilian_data_er.bronze.geolocation:main"
-bronze-order-items = "brazilian_data_er.bronze.order_items:main"
-bronze-order-payments = "brazilian_data_er.bronze.order_payments:main"
-bronze-order-reviews = "brazilian_data_er.bronze.order_reviews:main"
-bronze-orders = "brazilian_data_er.bronze.orders:main"
-bronze-products = "brazilian_data_er.bronze.products:main"
-bronze-sellers = "brazilian_data_er.bronze.sellers:main"
-bronze-product-category-translation = "brazilian_data_er.bronze.product_category_translation:main"
+# Bronze layer entry point
+bronze = "brazilian_data_er.bronze.bronze:main"
 
 # Silver layer entry points
 silver-customers = "brazilian_data_er.silver.customers:main"

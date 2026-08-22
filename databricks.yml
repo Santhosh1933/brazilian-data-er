@@ -3,99 +3,56 @@ resources:
     brazilian_ingestion:
       name: brazilian_ingestion
       tasks:
-        - task_key: bronze_customers
+        - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
-            entry_point: bronze-customers
-          environment_key: Default
-        - task_key: bronze_geolocation
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-geolocation
-          environment_key: Default
-        - task_key: bronze_order_items
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-order-items
-          environment_key: Default
-        - task_key: bronze_order_payments
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-order-payments
-          environment_key: Default
-        - task_key: bronze_order_reviews
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-order-reviews
-          environment_key: Default
-        - task_key: bronze_orders
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-orders
-          environment_key: Default
-        - task_key: bronze_products
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-products
-          environment_key: Default
-        - task_key: bronze_sellers
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-sellers
-          environment_key: Default
-        - task_key: bronze_product_category_translation
-          python_wheel_task:
-            package_name: brazilian-data-er
-            entry_point: bronze-product-category-translation
+            entry_point: bronze
           environment_key: Default
         - task_key: silver_customers
           depends_on:
-            - task_key: bronze_customers
-            - task_key: bronze_geolocation
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-customers
           environment_key: Default
         - task_key: silver_sellers
           depends_on:
-            - task_key: bronze_sellers
-            - task_key: bronze_geolocation
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-sellers
           environment_key: Default
         - task_key: silver_products
           depends_on:
-            - task_key: bronze_products
-            - task_key: bronze_product_category_translation
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-products
           environment_key: Default
         - task_key: silver_orders
           depends_on:
-            - task_key: bronze_orders
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-orders
           environment_key: Default
         - task_key: silver_order_items
           depends_on:
-            - task_key: bronze_order_items
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-order-items
           environment_key: Default
         - task_key: silver_payments
           depends_on:
-            - task_key: bronze_order_payments
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-payments
           environment_key: Default
         - task_key: silver_reviews
           depends_on:
-            - task_key: bronze_order_reviews
+            - task_key: bronze_ingestion
           python_wheel_task:
             package_name: brazilian-data-er
             entry_point: silver-reviews

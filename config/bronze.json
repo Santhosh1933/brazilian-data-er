@@ -1,0 +1,15 @@
+{
+  "app_name": "BronzeIngestion",
+  "write_mode": "overwrite",
+  "datasets": [
+    "customers",
+    "geolocation",
+    "order_items",
+    "order_payments",
+    "order_reviews",
+    "orders",
+    "products",
+    "sellers",
+    "product_category_translation"
+  ]
+}

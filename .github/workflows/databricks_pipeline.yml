@@ -2,7 +2,7 @@ name: Build and Deploy to Databricks
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -34,6 +34,9 @@ jobs:
         run: |
           databricks fs cp config.json \
           dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config.json \
+          --overwrite
+          databricks fs cp config/bronze.json \
+          dbfs:/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config/bronze.json \
           --overwrite
 
       - name: Build wheel
