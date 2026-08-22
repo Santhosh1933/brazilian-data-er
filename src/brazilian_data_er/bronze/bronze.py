@@ -14,7 +14,7 @@ from brazilian_data_er.utils.spark_utils import read_csv_from_config, save_as_ta
 def _load_bronze_config(config_path: Optional[str] = None) -> Dict[str, Any]:
     """Load bronze configuration from the Databricks volume or repository."""
     if config_path is None:
-        volume_config_path = "/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config/bronze.json"
+        volume_config_path = "/Volumes/brazilian-e-commerce/bronze/raw_data/configs/bronze.json"
         project_config_path = os.path.abspath(
             os.path.join(os.path.dirname(__file__), "../../..", "config", "bronze.json")
         )

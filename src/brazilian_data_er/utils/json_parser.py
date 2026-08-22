@@ -14,7 +14,7 @@ def load_config(config_path: str = None) -> Dict[str, Any]:
     
     Args:
         config_path: Path to the JSON configuration file. If None, uses default path:
-                     /Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config.json
+                     /Volumes/brazilian-e-commerce/bronze/raw_data/configs/config.json
         
     Returns:
         Dictionary containing parsed JSON configuration
@@ -24,15 +24,22 @@ def load_config(config_path: str = None) -> Dict[str, Any]:
         json.JSONDecodeError: If the JSON file is malformed
     """
     # Default config path in Databricks volume - allows config changes without rebuilding
-    default_config_path = "/Volumes/workspace/bronze/bronze_volume/brazilian-ecommerce/config.json"
+    default_config_path = "/Volumes/brazilian-e-commerce/bronze/raw_data/configs/config.json"
     
-    # Use default volume path if not provided
+    # Prefer the Databricks volume, with the repository config as a local fallback.
     if config_path is None:
         config_path = default_config_path
         if not os.path.exists(config_path):
-            raise FileNotFoundError(
-                f"Default configuration file not found: {config_path}"
-            )
+            current_file = os.path.abspath(__file__)
+            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(current_file))))
+            project_config = os.path.join(project_root, "config", "config.json")
+            if os.path.exists(project_config):
+                config_path = project_config
+            else:
+                raise FileNotFoundError(
+                    f"Default configuration file not found: {config_path} "
+                    f"(also checked: {project_config})"
+                )
     
     # If config_path is relative, try to find it relative to project root
     elif not os.path.isabs(config_path):
