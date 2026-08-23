@@ -2,7 +2,7 @@ name: Build and Deploy to Databricks
 
 on:
   push:
-    branches: [master]
+    branches: [rewiring]
   workflow_dispatch:
     inputs:
       run_demo:
