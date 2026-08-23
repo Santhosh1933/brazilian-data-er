@@ -77,7 +77,7 @@ The command should exit with code `1` after reporting `UNRESOLVED_COLUMN` for `m
 
 The GitHub Actions workflow builds and uploads the wheel, uploads the two Bronze configuration files, validates/deploys the demo bundle, and retains the existing Bronze job deployment. The intentionally failing demo runs only when the workflow is manually dispatched with `run_demo=true`.
 
-A Databricks cluster cannot reach a developer laptop through `127.0.0.1`. For a real cluster run, set `AUTOHEAL_WEBHOOK_URL` to a reachable HTTPS service or approved tunnel.
+A Databricks cluster cannot reach a developer laptop through `127.0.0.1`. The current demo tunnel endpoint is `https://6bea-27-5-229-236.ngrok-free.app/webhook/pipeline-failure`; set `AUTOHEAL_WEBHOOK_URL` to a new reachable HTTPS service or tunnel URL when the tunnel changes.
 
 ## Build and Deploy
 

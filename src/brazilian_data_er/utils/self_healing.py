@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import functools
 import json
+import logging
 import os
 import socket
 import traceback
@@ -17,6 +18,7 @@ from pyspark.sql import SparkSession
 
 F = TypeVar("F", bound=Callable[..., Any])
 DEFAULT_FAILURE_LOG_TABLE = "`brazilian-e-commerce`.bronze.task_failure_logs"
+logger = logging.getLogger("brazilian_data_er.self_healing")
 
 
 def _failure_log_table() -> str:
@@ -106,7 +108,7 @@ def notify_failure(payload: Dict[str, Any], timeout_seconds: float = 5.0) -> boo
         return False
     endpoint = os.getenv(
         "AUTOHEAL_WEBHOOK_URL",
-        "http://127.0.0.1:8000/webhook/pipeline-failure",
+        "https://6bea-27-5-229-236.ngrok-free.app/webhook/pipeline-failure",
     )
     request = urllib.request.Request(
         endpoint,
@@ -116,8 +118,27 @@ def notify_failure(payload: Dict[str, Any], timeout_seconds: float = 5.0) -> boo
     )
     try:
         with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
-            return 200 <= response.status < 300
-    except (OSError, urllib.error.URLError):
+            delivered = 200 <= response.status < 300
+            logger.info(
+                "AutoHeal webhook delivery status=%s endpoint=%s http_status=%s",
+                "delivered" if delivered else "rejected",
+                endpoint,
+                response.status,
+            )
+            return delivered
+    except urllib.error.HTTPError as error:
+        logger.error(
+            "AutoHeal webhook rejected event endpoint=%s http_status=%s",
+            endpoint,
+            error.code,
+        )
+        return False
+    except (OSError, urllib.error.URLError) as error:
+        logger.error(
+            "AutoHeal webhook unreachable endpoint=%s error=%s",
+            endpoint,
+            error,
+        )
         return False
 
 
@@ -131,8 +152,14 @@ def monitor_task(task_key: Optional[str] = None) -> Callable[[F], F]:
                 return function(*args, **kwargs)
             except Exception as error:
                 payload = build_failure_payload(resolved_task_key, error)
-                write_failure_log(SparkSession.getActiveSession(), payload)
-                notify_failure(payload)
+                log_written = write_failure_log(SparkSession.getActiveSession(), payload)
+                webhook_delivered = notify_failure(payload)
+                logger.info(
+                    "AutoHeal failure capture task=%s table_written=%s webhook_delivered=%s",
+                    resolved_task_key,
+                    log_written,
+                    webhook_delivered,
+                )
                 raise
 
         return cast(F, wrapped)
