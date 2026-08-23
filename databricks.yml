@@ -1,3 +1,6 @@
+bundle:
+  name: brazilian-data-etl-pipeline
+
 resources:
   jobs:
     brazilian_ingestion:
