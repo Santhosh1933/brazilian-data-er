@@ -28,9 +28,10 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Databricks CLI v2
+      - name: Install Databricks CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.281.0/install.sh | sudo sh
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v1.13.0/install.sh | sudo sh
+          databricks -v
 
       - name: Verify Databricks auth
         run: |
