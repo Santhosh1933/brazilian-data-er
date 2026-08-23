@@ -4,6 +4,12 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      run_demo:
+        description: Run the intentionally failing AutoHeal demo job
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build-deploy:
@@ -51,6 +57,19 @@ jobs:
           databricks fs cp "$WHL_FILE" \
           dbfs:/Volumes/brazilian-e-commerce/bronze/raw_data/builds/ \
           --overwrite
+
+      - name: Validate self-healing demo bundle
+        run: |
+          databricks bundle validate
+
+      - name: Deploy self-healing demo bundle
+        run: |
+          databricks bundle deploy
+
+      - name: Trigger self-healing demo job
+        if: github.event_name == 'workflow_dispatch' && inputs.run_demo == true
+        run: |
+          databricks bundle run brazilian_self_healing_demo
 
       - name: Deploy Databricks job
         run: |

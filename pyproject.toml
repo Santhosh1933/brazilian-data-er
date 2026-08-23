@@ -16,10 +16,16 @@ dependencies = [
 # Bronze layer entry point
 bronze = "brazilian_data_er.bronze.bronze:main"
 
+# AutoHeal test Silver tasks
+silver-demo-customers = "brazilian_data_er.silver.demo_tasks:customers_main"
+silver-demo-orders = "brazilian_data_er.silver.demo_tasks:orders_main"
+silver-demo-quality-check = "brazilian_data_er.silver.demo_tasks:quality_check_main"
+
 [tool.setuptools]
 packages = [
     "brazilian_data_er",
     "brazilian_data_er.bronze",
+    "brazilian_data_er.silver",
     "brazilian_data_er.utils"
 ]
 

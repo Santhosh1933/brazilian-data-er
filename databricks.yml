@@ -17,3 +17,35 @@ resources:
               - /Volumes/brazilian-e-commerce/bronze/raw_data/builds/brazilian_data_er-0.1.2-py3-none-any.whl
             environment_version: "4"
       performance_target: PERFORMANCE_OPTIMIZED
+
+    brazilian_self_healing_demo:
+      name: brazilian_self_healing_demo
+      tasks:
+        - task_key: silver_demo_customers
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-demo-customers
+          environment_key: Default
+        - task_key: silver_demo_orders
+          depends_on:
+            - task_key: silver_demo_customers
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-demo-orders
+          environment_key: Default
+        - task_key: silver_demo_quality_check
+          depends_on:
+            - task_key: silver_demo_orders
+          python_wheel_task:
+            package_name: brazilian-data-er
+            entry_point: silver-demo-quality-check
+          environment_key: Default
+      queue:
+        enabled: true
+      environments:
+        - environment_key: Default
+          spec:
+            dependencies:
+              - /Volumes/brazilian-e-commerce/bronze/raw_data/builds/brazilian_data_er-0.1.2-py3-none-any.whl
+            environment_version: "4"
+      performance_target: PERFORMANCE_OPTIMIZED
