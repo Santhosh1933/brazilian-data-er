@@ -32,12 +32,14 @@ The failing tasks use `@monitor_task` from `src/brazilian_data_er/utils/self_hea
 
 On failure the decorator:
 
-1. Captures the Databricks run, job, task, commit, cluster, Spark error, and traceback metadata.
+1. Captures the Databricks run, job, task, cluster, Spark error, and traceback metadata.
 2. Checks whether `` `brazilian-e-commerce`.bronze.task_failure_logs `` exists.
 3. Creates the Delta table with Change Data Feed enabled when it is missing.
 4. Appends the event when the Databricks catalog is available.
-5. Sends the event to the AutoHeal webhook.
+5. Sends the event to the project AutoHeal webhook.
 6. Re-raises the original Spark exception.
+
+The ETL notifier requires no `.env` file or manually supplied run, job, or commit variables. It uses fixed project defaults and reads run, job, and cluster IDs from Spark configuration when Databricks exposes them. Branch selection, classification, RCA, validation, and PR creation remain responsibilities of the AutoHeal service.
 
 ## Local Demo
 
@@ -50,18 +52,12 @@ docker build -t autoheal-pyspark-validator:local /home/santhosh/project/self-hea
 Run the ETL demo from this repository with the PySpark image. Set `DEMO_OUTPUT_PATH` to a local path when running outside Databricks; the default is the Databricks Volume path:
 
 ```bash
-AUTOHEAL_RUN_ID=local-demo-run \
-AUTOHEAL_JOB_ID=brazilian-self-healing-demo \
-AUTOHEAL_WEBHOOK_URL=http://127.0.0.1:8000/webhook/pipeline-failure \
-AUTOHEAL_NOTIFY_ENABLED=true \
-GIT_COMMIT_SHA=local-demo-commit \
 SPARK_LOCAL_HOSTNAME=localhost \
 docker run --rm --network=host --read-only \
   --tmpfs '/tmp:rw,exec,nosuid,size=1g' \
   -v "$PWD:/workspace:ro" \
   -e PYTHONPATH=/workspace/src \
-  -e AUTOHEAL_RUN_ID -e AUTOHEAL_JOB_ID -e AUTOHEAL_WEBHOOK_URL \
-  -e AUTOHEAL_NOTIFY_ENABLED -e GIT_COMMIT_SHA -e SPARK_LOCAL_HOSTNAME \
+  -e SPARK_LOCAL_HOSTNAME \
   --entrypoint python autoheal-pyspark-validator:local -u \
   -m brazilian_data_er.silver.demo_tasks --task all
 ```
