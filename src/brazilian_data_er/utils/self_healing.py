@@ -32,7 +32,10 @@ def _env_bool(name: str, default: bool = True) -> bool:
 def build_failure_payload(task_key: str, error: BaseException) -> Dict[str, Any]:
     """Build a failure payload from Databricks and local execution metadata."""
     spark = SparkSession.getActiveSession()
-    spark_context = spark.sparkContext if spark else None
+    try:
+        spark_version = spark.version if spark else "local"
+    except Exception:
+        spark_version = "unknown"
     return {
         "failure_event_id": str(uuid.uuid4()),
         "run_id": os.getenv("DATABRICKS_RUN_ID", os.getenv("AUTOHEAL_RUN_ID", "local-demo-run")),
@@ -43,7 +46,7 @@ def build_failure_payload(task_key: str, error: BaseException) -> Dict[str, Any]
         "stack_trace": traceback.format_exc(),
         "commit_sha": os.getenv("GIT_COMMIT_SHA", "local-demo-commit"),
         "cluster_id": os.getenv("DATABRICKS_CLUSTER_ID", socket.gethostname()),
-        "spark_version": spark_context.version if spark_context else "local",
+        "spark_version": spark_version,
         "event_time": datetime.now(timezone.utc),
     }
 

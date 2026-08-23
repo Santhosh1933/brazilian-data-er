@@ -24,8 +24,8 @@ The demo adds three declarative Silver tasks:
 silver_demo_customers -> silver_demo_orders -> silver_demo_quality_check
 ```
 
-- `silver_demo_customers` creates and writes a small dummy customer DataFrame.
-- `silver_demo_orders` creates and writes a small dummy order DataFrame.
+- `silver_demo_customers` creates and writes a small dummy customer DataFrame to `/Volumes/brazilian-e-commerce/bronze/raw_data/demo/silver/customers`.
+- `silver_demo_orders` creates and writes a small dummy order DataFrame to `/Volumes/brazilian-e-commerce/bronze/raw_data/demo/silver/orders`.
 - `silver_demo_quality_check` intentionally selects `missing_business_column` and raises a deterministic Spark `AnalysisException`.
 
 The failing tasks use `@monitor_task` from `src/brazilian_data_er/utils/self_healing.py`.
@@ -47,7 +47,7 @@ Start the AutoHeal service from the self-healing service repository, then build 
 docker build -t autoheal-pyspark-validator:local /home/santhosh/project/self-healing-pipeline/sandbox
 ```
 
-Run the ETL demo from this repository with the PySpark image:
+Run the ETL demo from this repository with the PySpark image. Set `DEMO_OUTPUT_PATH` to a local path when running outside Databricks; the default is the Databricks Volume path:
 
 ```bash
 AUTOHEAL_RUN_ID=local-demo-run \

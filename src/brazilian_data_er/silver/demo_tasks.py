@@ -23,7 +23,10 @@ ORDERS = [
 
 def _output_path(task_name: str) -> str:
     """Return the temporary output path used by the demo."""
-    root = os.getenv("DEMO_OUTPUT_PATH", "/tmp/brazilian-data-er-demo/silver")
+    root = os.getenv(
+        "DEMO_OUTPUT_PATH",
+        "/Volumes/brazilian-e-commerce/bronze/raw_data/demo/silver",
+    )
     return os.path.join(root, task_name)
 
 
