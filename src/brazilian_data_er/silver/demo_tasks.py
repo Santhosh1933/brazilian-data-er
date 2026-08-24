@@ -70,7 +70,7 @@ def process_demo_quality_check(spark: SparkSession) -> DataFrame:
     """Raise a deterministic missing-column Spark schema failure."""
     orders = spark.read.parquet(_output_path("orders"))
     invalid_projection = orders.select(
-        "order_id", "customer_id", "missing_business_column"
+        "order_id", "customer_id", "order_total"
     )
     invalid_projection.limit(1).count()
     return invalid_projection
