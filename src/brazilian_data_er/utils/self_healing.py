@@ -18,7 +18,7 @@ from pyspark.sql import SparkSession
 F = TypeVar("F", bound=Callable[..., Any])
 DEFAULT_FAILURE_LOG_TABLE = "`brazilian-e-commerce`.bronze.task_failure_logs"
 DEFAULT_REPOSITORY_URL = "https://github.com/Santhosh1933/brazilian-data-etl-pipeline.git"
-DEFAULT_WEBHOOK_URL = "https://6bea-27-5-229-236.ngrok-free.app/webhook/pipeline-failure"
+DEFAULT_WEBHOOK_URL = "https://d515-27-5-229-236.ngrok-free.app/webhook/pipeline-failure"
 logger = logging.getLogger("brazilian_data_er.self_healing")
 
 
